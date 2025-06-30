@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Spin, Result, Button, Card, Avatar, Typography, Tag, Tooltip } from 'antd';
-import { UserOutlined, MessageOutlined, CalendarOutlined } from '@ant-design/icons';
+import { UserOutlined, MessageOutlined } from '@ant-design/icons';
 
 const { Title, Text, Paragraph } = Typography;
 

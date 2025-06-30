@@ -4,6 +4,8 @@ import Home from './pages/Home'
 import PostList from './pages/PostList'
 import PostDetail from './pages/PostDetail'
 import GoogleTranslate from './pages/GoogleTranslate'
+import BookList from './pages/BookList'
+import BookDetail from './pages/BookDetail'
 import { Tabs } from 'antd'
 import './App.css'
 import VirusTotal from './pages/VirusTotal'
@@ -14,9 +16,10 @@ function AppContent() {
 
   const getActiveKey = () => {
     if (location.pathname === '/' || location.pathname === '/home') return 'Home';
-    if (location.pathname.startsWith('/posts')) return 'Posts';
+    if (location.pathname === ('/posts')) return 'Posts';
     if (location.pathname === '/translate') return 'Translate';
     if (location.pathname === '/scanner') return 'Scanner';
+    if (location.pathname === '/books') return 'Books';
     return 'Home';
   };
 
@@ -31,13 +34,15 @@ function AppContent() {
     if (key === 'Posts') navigate('/posts');
     if (key === 'Translate') navigate('/translate');
     if (key === 'Scanner') navigate('/scanner');
+    if (key === 'Books') navigate('/books');
   }
 
   const items = [
     { key: 'Home', label: 'Home' },
     { key: 'Posts', label: 'Posts' },
     { key: 'Translate', label: 'Translate' },
-    { key: 'Scanner', label: 'VirusTotal Scanner' }
+    { key: 'Scanner', label: 'VirusTotal Scanner' },
+    { key: 'Books', label: 'Books' }
   ];
 
   return (
@@ -58,8 +63,10 @@ function AppContent() {
         <Route path="/" element={<Home />} />
         <Route path="/posts" element={<PostList />} />
         <Route path="/posts/:postId" element={<PostDetail />} />
-        <Route path='/translate' element={<GoogleTranslate />} />
+        <Route path='/translate' element={<GoogleTranslate />} /> 
         <Route path='/scanner' element={<VirusTotal />} />
+        <Route path='/books' element={<BookList />} />
+        <Route path='/books/:bookId' element={<BookDetail />} />
       </Routes>
     </>
   )
