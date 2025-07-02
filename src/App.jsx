@@ -6,6 +6,10 @@ import PostDetail from './pages/PostDetail'
 import GoogleTranslate from './pages/GoogleTranslate'
 import BookList from './pages/BookList'
 import BookDetail from './pages/BookDetail'
+import AddBook from './pages/AddBook'
+import EditBook from './pages/EditBook'
+import AddCategory from './pages/AddCategory'
+import AddComment from './pages/AddComment'
 import { Tabs } from 'antd'
 import './App.css'
 import VirusTotal from './pages/VirusTotal'
@@ -20,6 +24,9 @@ function AppContent() {
     if (location.pathname === '/translate') return 'Translate';
     if (location.pathname === '/scanner') return 'Scanner';
     if (location.pathname === '/books') return 'Books';
+    if (location.pathname === '/books/add') return 'Books';
+    if (location.pathname === '/books/:bookId/edit') return 'Books';
+    if (location.pathname === '/category') return 'Categories';
     return 'Home';
   };
 
@@ -35,6 +42,7 @@ function AppContent() {
     if (key === 'Translate') navigate('/translate');
     if (key === 'Scanner') navigate('/scanner');
     if (key === 'Books') navigate('/books');
+    if (key === 'Categories') navigate('/category');
   }
 
   const items = [
@@ -42,7 +50,8 @@ function AppContent() {
     { key: 'Posts', label: 'Posts' },
     { key: 'Translate', label: 'Translate' },
     { key: 'Scanner', label: 'VirusTotal Scanner' },
-    { key: 'Books', label: 'Books' }
+    { key: 'Books', label: 'Books' },
+    { key: 'Categories', label: 'Categories' },
   ];
 
   return (
@@ -67,6 +76,10 @@ function AppContent() {
         <Route path='/scanner' element={<VirusTotal />} />
         <Route path='/books' element={<BookList />} />
         <Route path='/books/:bookId' element={<BookDetail />} />
+        <Route path='/books/add' element={<AddBook />} />
+        <Route path='/books/:bookId/edit' element={<EditBook />} />
+        <Route path='/books/:bookId/add-comment' element={<AddComment />} />
+        <Route path='/category' element={<AddCategory />} />
       </Routes>
     </>
   )

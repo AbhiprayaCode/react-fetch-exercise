@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Spin, Card, Pagination, Typography, Tag, Button } from 'antd';
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import SearchBar from "../components/SearchBar";
 
 const { Paragraph, Title, Text } = Typography;
 const PAGE_SIZE = 12;
@@ -9,15 +10,23 @@ const BookList = () => {
     const [books, setBooks] = useState([])
     const [loading, setLoading] = useState(true)
     const [current, setCurrent] = useState(1)
+    const location = useLocation();
+    const searchQuery = location.state?.search || '';
 
     useEffect(() => {
-        fetch('http://localhost:8080/books/')
+        setLoading(true);
+        let url = 'http://localhost:8080/books/';
+        if (searchQuery) {
+            url = `http://localhost:8080/books?keyword=${encodeURIComponent(searchQuery)}`;
+        }
+        fetch(url)
             .then(res => res.json())
             .then(data => {
                 setBooks(data)
                 setLoading(false)
             })
-    }, []);
+            .catch(() => setLoading(false));
+    }, [searchQuery]);
 
     if (loading) {
         return <Spin size="large" style={{display: "flex", justifyContent: "center", alignItems: "center", height: "100vh"}} />;
@@ -31,6 +40,12 @@ const BookList = () => {
             <Title level={2} style={{ textAlign: 'center', marginBottom: 32, letterSpacing: 1 }}>
                 Books List
             </Title>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 32 }}>
+                <Link to="/books/add">
+                    <Button type="primary" style={{ marginBottom: 32 }}>✏️ Add Book</Button>
+                </Link>
+                <SearchBar />
+            </div>
             <div style={{
                 display: 'grid',
                 gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
@@ -64,11 +79,15 @@ const BookList = () => {
                             <Tag color="blue" style={{ marginBottom: 12 }}>{item.category}</Tag>
                             <Paragraph ellipsis={{ rows: 3 }} style={{ color: '#555', marginBottom: 0 }}>{item.description || '-'}</Paragraph>
                             <div style={{ marginTop: 16, textAlign: 'right' }}>
-                                <Link to={`/books/${item.id}`} state={{ bookId: item.id }}>
-                                    <Button type="primary" shape="round" size="middle">
-                                        Details
-                                    </Button>
-                                </Link>
+                                <Button
+                                    type="primary"
+                                    size="middle"
+                                    onClick={() => {
+                                        window.location.assign(`/books/${item._id || item.id}`);
+                                    }}
+                                >
+                                    Details
+                                </Button>
                             </div>
                         </Card>
                     ))
