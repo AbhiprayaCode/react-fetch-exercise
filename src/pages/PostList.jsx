@@ -4,13 +4,20 @@ import { Link } from "react-router-dom"
 import { UserOutlined, MessageOutlined } from '@ant-design/icons';
 
 const { Paragraph, Text, Title } = Typography;
-const PAGE_SIZE = 12;
+// const PAGE_SIZE = 12;
 
 const PostList = () => {
-    const [posts, setPosts] = useState([])
     const [loading, setLoading] = useState(true)
-    const [current, setCurrent] = useState(1)
 
+    // Pagination
+    const [posts, setPosts] = useState([])
+    const [page, setPage] = useState(1)
+    const [pageSize, setPageSize] = useState(10)
+    const startIdx = (page - 1) * pageSize;
+    const endIdx = startIdx + pageSize;
+    const currentPosts = posts.slice(startIdx, endIdx);
+
+    // Fetching data from API
     useEffect(() => {
         fetch('https://jsonplaceholder.typicode.com/posts')
             .then(res => res.json())
@@ -20,20 +27,22 @@ const PostList = () => {
             })
     }, [])
 
+    // Loading design
     if (loading) {
         return <Spin size="large" style={{display: "flex", justifyContent: "center", alignItems: "center", height: "100vh"}} />
     }
 
-    const startIdx = (current - 1) * PAGE_SIZE;
-    const endIdx = startIdx + PAGE_SIZE;
-    const currentPosts = posts.slice(startIdx, endIdx);
 
     return (
         <div style={{ maxWidth: 1100, margin: '0 auto', padding: 24 }}>
+
+            {/* Title */}
             <Title level={2} style={{ textAlign: 'center', marginBottom: 24 }}>
                 <MessageOutlined style={{ color: '#52c41a', marginRight: 8 }} />
                 Posts List
             </Title>
+            
+            {/* Posts List */}
             <div style={{
                 display: "flex",
                 flexDirection: "column",
@@ -44,6 +53,8 @@ const PostList = () => {
                 boxShadow: '0 2px 8px #f0f1f2',
                 padding: 8
             }}>
+
+                {/* Mapping Posts */}
                 {currentPosts.map((item) => (
                     <Card
                         hoverable
@@ -85,13 +96,18 @@ const PostList = () => {
                     </Card>
                 ))}
             </div>
+
+            {/* Pagination */}
             <div style={{ display: "flex", justifyContent: "center", marginTop: 32 }}>
                 <Pagination
-                    current={current}
-                    pageSize={PAGE_SIZE}
+                    current={page}
+                    pageSize={pageSize}
                     total={posts.length}
-                    onChange={page => setCurrent(page)}
-                    showSizeChanger={false}
+                    onChange={page => setPage(page)}
+                    showSizeChanger={true}
+                    onShowSizeChange={(current, size) => setPageSize(size)}
+                    showQuickJumper={true}
+                    showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}   
                 />
             </div>
         </div>

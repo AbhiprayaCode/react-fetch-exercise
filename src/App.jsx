@@ -10,7 +10,7 @@ import AddBook from './pages/AddBook'
 import EditBook from './pages/EditBook'
 import AddCategory from './pages/AddCategory'
 import AddComment from './pages/AddComment'
-import { Tabs } from 'antd'
+import NavBar from './components/NavBar'
 import './App.css'
 import VirusTotal from './pages/VirusTotal'
 
@@ -45,15 +45,6 @@ function AppContent() {
     if (key === 'Categories') navigate('/category');
   }
 
-  const items = [
-    { key: 'Home', label: 'Home' },
-    { key: 'Posts', label: 'Posts' },
-    { key: 'Translate', label: 'Translate' },
-    { key: 'Scanner', label: 'VirusTotal Scanner' },
-    { key: 'Books', label: 'Books' },
-    { key: 'Categories', label: 'Categories' },
-  ];
-
   return (
     <>
       {loading && (
@@ -62,11 +53,7 @@ function AppContent() {
         </div>
       )}
 
-      <Tabs
-        activeKey={getActiveKey()}
-        items={items}
-        onChange={onChange}
-      />
+      <NavBar activeKey={getActiveKey()} onChange={onChange} />
 
       <Routes>
         <Route path="/" element={<Home />} />
